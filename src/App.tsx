@@ -8,7 +8,7 @@ import Reset from "./assets/images/reset.svg";
 function App() {
     return (
         <div className="min-w-screen min-h-screen flex bg-white px-24 py-8">
-            <div className="w-2/5 bg-primary25 min-h-full flex flex-col justify-center items-center">
+            <div className="w-2/5 bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen">
                 <div className="w-24 h-36 border border-purple-700 rounded-md flex justify-center items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-purple-700">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -26,7 +26,7 @@ function App() {
                 </div>
             </div>
             <div className="w-3/5 bg-gray-50 min-h-full px-8 flex flex-col">
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <img src={Logo} alt={"Canvas Editor"} />
                         <h1 className="font-bold text-gray-800 text-32 ml-4">CanvasEditor</h1>
@@ -37,25 +37,25 @@ function App() {
                     </button>
                 </div>
 
-                <div className="mb-8">
+                <div className="mt-8">
                     <h2 className="text-medium font-bold text-gray-800 mb-4">Add content</h2>
                     <div className="grid grid-cols-3 gap-4">
                         <div className="bg-white p-4 rounded shadow-sm flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center mb-2">
-                                <img className={"w-[32px] h-[32px]"} src={Text} alt={"Text"} />
+                                <img className={"w-32 h-32"} src={Text} alt={"Text"} />
                             </div>
                             <p className="text-18 text-black100 font-medium">Text</p>
                         </div>
-                        <div className="bg-white p-16 rounded shadow-sm flex flex-col items-center justify-center">
+                        <div className="bg-white p-4 rounded shadow-sm flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center mb-2">
-                                <img className={"w-[32px] h-[32px]"} src={Image} alt={"Image"} />
+                                <img className={"w-32 h-32"} src={Image} alt={"Image"} />
                             </div>
                             <p className="text-18 text-black100 font-medium">Image</p>
                         </div>
                         <br></br>
                         <div className="bg-white p-4 rounded shadow-sm flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center mb-2">
-                                <img className={"w-[32px] h-[32px]"} src={Background} alt={"Background"} />
+                                <img className={"w-32 h-32"} src={Background} alt={"Background"} />
                             </div>
                             <p className="text-18 text-black100 font-medium">Background</p>
                         </div>
