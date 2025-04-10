@@ -18,6 +18,10 @@ module.exports = {
                 "white": "#FFFFFF",
                 "white98": "#FAFAFA",
                 "white97": "#F7F7F8",
+            },
+            fontSize: {
+                "18": "18px",
+                "32": "32px",
             }
         },
     },
