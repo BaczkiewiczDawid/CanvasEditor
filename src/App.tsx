@@ -18,14 +18,14 @@ function App() {
                 </div>
                 <div className={"w-2/5 h-1 bg-primary50 opacity-50 mt-4 rounded-full"}></div>
                 <div className="text-center flex flex-col items-center justify-center gap-y-3 mt-4 w-2/3">
-                    <h1 className="text-xl font-bold text-gray-900">Create your own Poster!</h1>
-                    <p className="font-medium text-sm text-gray-700">
+                    <h1 className="text-xl font-bold text-black100">Create your own Poster!</h1>
+                    <p className="font-medium text-sm text-black75">
                         It's so simple. Start creating your own poster by clicking one of the action buttons located on the right.
                     </p>
-                    <p className="font-light text-gray-600 text-xs">(Ratio 4:5)</p>
+                    <p className="font-light text-black75 text-xs">(Ratio 4:5)</p>
                 </div>
             </div>
-            <div className="w-3/5 bg-gray-50 min-h-full px-8 flex flex-col">
+            <div className="w-3/5 bg-white97 min-h-full px-8 flex flex-col">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <img src={Logo} alt={"Canvas Editor"} />
