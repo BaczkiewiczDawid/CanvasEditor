@@ -183,9 +183,8 @@ function App() {
                                             setCanvasItems(updatedItems);
                                         }}
                                     />
-                                    <div
-                                        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-12 flex space-x-2">
-                                        {colors.map((color) => (
+                                    <div className="absolute bottom-0 translate-y-12 flex space-x-2">
+                                    {colors.map((color) => (
                                             <div
                                                 key={color}
                                                 className={`w-6 h-6 rounded-full cursor-pointer ${item.selectedColor === color ? 'ring-2 ring-primary' : ''}`}
