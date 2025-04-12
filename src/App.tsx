@@ -137,12 +137,12 @@ function App() {
                         </div>
                     </div>
                 ) : (
-                    <div className="w-full h-full relative">
+                    <div className="w-full h-full relative bg-black75">
                         {canvasItems.map((item: any) => (
                             item.type === 'text' && (
                                 <div
                                     key={item.id}
-                                    className={"relative border-2 border-primary50 p-8"}
+                                    className={"relative border-2 border-primary p-8"}
                                     style={{
                                         position: 'absolute',
                                         left: item.x,
@@ -150,27 +150,27 @@ function App() {
                                         transform: 'translate(-50%, -50%)',
                                         minWidth: '300px',
                                         minHeight: '150px',
-                                        backgroundColor: '#D3D3D3',
+                                        backgroundColor: 'transparent',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center'
                                     }}
                                 >
                                     <div
-                                        className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border border-purple-600 cursor-move"
+                                        className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border cursor-move"
                                         onMouseDown={(e) => handleMouseDown(e, item.id)}
                                     >
-                                        <img src={Move} alt={"Move"}/>
+                                        <img src={Move} alt={"Move"} className={"w-4 h-4"}/>
                                     </div>
                                     <div
-                                        className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border border-purple-600 cursor-pointer"
+                                        className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border  cursor-pointer"
                                         onClick={() => deleteItem(item.id)}
                                     >
-                                        <img src={Delete} alt={"Delete item"}/>
+                                        <img src={Delete} alt={"Delete item"} className={"w-4 h-4"}/>
                                     </div>
                                     <div
                                         className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
-                                        <div className="w-4 h-4 bg-primary50 rounded-full"></div>
+                                        <div className="w-4 h-4 bg-primary border-white border-2 rounded-full"></div>
                                     </div>
                                     <input
                                         className="text-center bg-transparent border-none outline-none w-full"
@@ -190,11 +190,11 @@ function App() {
                                             setCanvasItems(updatedItems);
                                         }}
                                     />
-                                    <div className="absolute bottom-0 -translate-x-1/2 translate-y-12 flex space-x-2">
+                                    <div className="absolute bottom-0 left-0 translate-y-8 flex space-x-2">
                                         {colors.map((color) => (
                                             <div
                                                 key={color}
-                                                className={`w-6 h-6 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-primary' : ''}`}
+                                                className={`w-4 h-4 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-white' : ''}`}
                                                 style={{
                                                     backgroundColor: color,
                                                     border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none'
