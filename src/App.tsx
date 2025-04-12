@@ -87,6 +87,24 @@ function App() {
         setCanvasItems(updatedItems);
     }
 
+    const colors = [
+        '#000000',
+        '#FFFFFF',
+        '#FF0000',
+        '#0000FF',
+        '#00FF00',
+    ];
+
+    const handleColorChange = (color: string, id: number) => {
+        const updatedItems = canvasItems.map(item => {
+            if (item.id === id) {
+                return {...item, color};
+            }
+            return item;
+        });
+        setCanvasItems(updatedItems);
+    }
+
     return (
         <div className="min-w-screen min-h-screen flex bg-white px-24 py-8">
             {/* @ts-ignore */}
@@ -147,14 +165,10 @@ function App() {
                                     >
                                         <img src={Delete} alt={"Delete item"}/>
                                     </div>
-
-                                    {/* Resize handle */}
                                     <div
                                         className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
                                         <div className="w-4 h-4 bg-primary50 rounded-full"></div>
                                     </div>
-
-                                    {/* Text content */}
                                     <input
                                         className="w-full h-full flex items-center justify-center bg-transparent border-none"
                                         style={{color: item.color, fontSize: `${item.fontSize}px`}}
@@ -169,18 +183,19 @@ function App() {
                                             setCanvasItems(updatedItems);
                                         }}
                                     />
-
-                                    {/* Color selector */}
                                     <div
                                         className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-12 flex space-x-2">
-                                        {/*{colors.map((color) => (*/}
-                                        {/*    <div*/}
-                                        {/*        key={color}*/}
-                                        {/*        className={`w-6 h-6 rounded-full cursor-pointer ${selectedColor === color ? 'ring-2 ring-purple-600' : ''}`}*/}
-                                        {/*        style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none' }}*/}
-                                        {/*        onClick={() => handleColorChange(color)}*/}
-                                        {/*    />*/}
-                                        {/*))}*/}
+                                        {colors.map((color) => (
+                                            <div
+                                                key={color}
+                                                className={`w-6 h-6 rounded-full cursor-pointer ${item.selectedColor === color ? 'ring-2 ring-primary' : ''}`}
+                                                style={{
+                                                    backgroundColor: color,
+                                                    border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none'
+                                                }}
+                                                onClick={() => handleColorChange(color, item.id)}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             )
