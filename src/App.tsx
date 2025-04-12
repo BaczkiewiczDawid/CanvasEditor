@@ -6,6 +6,8 @@ import Background from './assets/images/background.svg';
 import Reset from "./assets/images/reset.svg";
 import Move from "./assets/images/move.svg";
 import Delete from "./assets/images/delete.svg";
+import Warning from "./assets/images/alert.svg";
+import {Button} from "./components/button";
 
 type CanvasItem = {
     id: number;
@@ -21,6 +23,7 @@ type CanvasItem = {
 
 function App() {
     const [canvasItems, setCanvasItems] = useState<CanvasItem[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const handleText = () => {
@@ -220,7 +223,9 @@ function App() {
                         <h1 className="font-bold text-gray-800 text-32 ml-4">CanvasEditor</h1>
                     </div>
                     <button className={"border-b-2 border-redPrimary flex items-center justify-between gap-x-2"}
-                            onClick={handleResetCanvas}>
+                            onClick={() => {
+                                setIsModalOpen(true)
+                            }}>
                         <p className="text-redPrimary text-sm">Reset</p>
                         <img src={Reset} alt="Reset" className={"w-6"}/>
                     </button>
@@ -251,12 +256,32 @@ function App() {
                     </div>
                 </div>
                 <div className="mt-auto flex justify-end">
-                    <button
-                        className="bg-primary text-white py-2 px-4 rounded hover:bg-buttonHover focus:border-primary50 disabled:bg-black25 transition-colors">
-                        Export to PNG
-                    </button>
+                    <Button text={"Export to PNG"}/>
                 </div>
             </div>
+            {isModalOpen && (
+                <div className={"absolute left-0 top-0 w-screen h-screen"}>
+                    <div className={"absolute left-0 top-0 w-screen h-screen bg-black opacity-40 z-999"}></div>
+                    <div
+                        className={"w-1/2 py-16 bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg flex flex-col items-center justify-center z-1000"}>
+                        <img src={Warning} alt={"Warning"} className={"w-1/4"}/>
+                        <div className={"w-3/4 text-center"}>
+                            <h2 className={"font-bold text-32 text-black"}>Warning</h2>
+                            <p className={"font-medium text-18 text-center text-black75"}>You're about to reset your
+                                whole progress.
+                                Are you sure you want to do it?</p>
+                            <div className={"flex gap-x-4 justify-center mt-8"}>
+                                <button className={"font-medium text-18"} onClick={() => setIsModalOpen(false)}>Cancel
+                                </button>
+                                <Button text={"Reset"} onClick={() => {
+                                    handleResetCanvas()
+                                    setIsModalOpen(false)
+                                }}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
