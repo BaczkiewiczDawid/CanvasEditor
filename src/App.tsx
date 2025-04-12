@@ -4,6 +4,8 @@ import Text from './assets/images/text.svg';
 import Image from './assets/images/img.svg';
 import Background from './assets/images/background.svg';
 import Reset from "./assets/images/reset.svg";
+import Move from "./assets/images/move.svg";
+import Delete from "./assets/images/delete.svg";
 
 type CanvasItem = {
     id: number;
@@ -80,6 +82,11 @@ function App() {
         setCanvasItems(updatedItems);
     };
 
+    const deleteItem = (id: number) => {
+        const updatedItems = canvasItems.filter(item => item.id !== id);
+        setCanvasItems(updatedItems);
+    }
+
     return (
         <div className="min-w-screen min-h-screen flex bg-white px-24 py-8">
             {/* @ts-ignore */}
@@ -117,19 +124,64 @@ function App() {
                             item.type === 'text' && (
                                 <div
                                     key={item.id}
+                                    className={"relative border-2 border-primary50 p-8"}
                                     style={{
                                         position: 'absolute',
                                         left: item.x,
                                         top: item.y,
-                                        color: item.color,
-                                        fontSize: `${item.fontSize}px`,
-                                        cursor: item.isDraggable ? 'move' : 'default',
                                         transform: 'translate(-50%, -50%)',
-                                        userSelect: 'none'
+                                        minWidth: '300px',
+                                        minHeight: '150px',
+                                        backgroundColor: '#D3D3D3',
                                     }}
-                                    onMouseDown={(e) => handleMouseDown(e, item.id)}
                                 >
-                                    {item.content}
+                                    <div
+                                        className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border border-purple-600 cursor-move"
+                                        onMouseDown={(e) => handleMouseDown(e, item.id)}
+                                    >
+                                        <img src={Move} alt={"Move"}/>
+                                    </div>
+                                    <div
+                                        className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border border-purple-600 cursor-pointer"
+                                        onClick={() => deleteItem(item.id)}
+                                    >
+                                        <img src={Delete} alt={"Delete item"}/>
+                                    </div>
+
+                                    {/* Resize handle */}
+                                    <div
+                                        className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
+                                        <div className="w-4 h-4 bg-primary50 rounded-full"></div>
+                                    </div>
+
+                                    {/* Text content */}
+                                    <input
+                                        className="w-full h-full flex items-center justify-center bg-transparent border-none"
+                                        style={{color: item.color, fontSize: `${item.fontSize}px`}}
+                                        value={item.content}
+                                        onChange={(e) => {
+                                            const updatedItems = canvasItems.map((i) => {
+                                                if (i.id === item.id) {
+                                                    return {...i, content: e.target.value};
+                                                }
+                                                return i;
+                                            });
+                                            setCanvasItems(updatedItems);
+                                        }}
+                                    />
+
+                                    {/* Color selector */}
+                                    <div
+                                        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-12 flex space-x-2">
+                                        {/*{colors.map((color) => (*/}
+                                        {/*    <div*/}
+                                        {/*        key={color}*/}
+                                        {/*        className={`w-6 h-6 rounded-full cursor-pointer ${selectedColor === color ? 'ring-2 ring-purple-600' : ''}`}*/}
+                                        {/*        style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none' }}*/}
+                                        {/*        onClick={() => handleColorChange(color)}*/}
+                                        {/*    />*/}
+                                        {/*))}*/}
+                                    </div>
                                 </div>
                             )
                         ))}
