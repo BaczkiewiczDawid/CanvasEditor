@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ca3379d-31f6-4bf7-be8c-8afb4b882b98" name="Changes" comment="feat: change colors">
+    <list default="true" id="1ca3379d-31f6-4bf7-be8c-8afb4b882b98" name="Changes" comment="feat: change colors - add border for selected color">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
     </list>
@@ -80,7 +80,7 @@
       <option name="presentableId" value="Default" />
       <updated>1744214922244</updated>
       <workItem from="1744214923916" duration="7805000" />
-      <workItem from="1744438707538" duration="3845000" />
+      <workItem from="1744438707538" duration="8034000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -154,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744442033626</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat: change colors - add border for selected color">
+      <option name="closed" value="true" />
+      <created>1744443222086</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1744443222086</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,6 +174,7 @@
     <MESSAGE value="feat: layout" />
     <MESSAGE value="feat: design, delete item" />
     <MESSAGE value="feat: change colors" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: change colors" />
+    <MESSAGE value="feat: change colors - add border for selected color" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: change colors - add border for selected color" />
   </component>
 </project>

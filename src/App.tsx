@@ -151,6 +151,9 @@ function App() {
                                         minWidth: '300px',
                                         minHeight: '150px',
                                         backgroundColor: '#D3D3D3',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
                                     }}
                                 >
                                     <div
@@ -170,9 +173,13 @@ function App() {
                                         <div className="w-4 h-4 bg-primary50 rounded-full"></div>
                                     </div>
                                     <input
-                                        className="w-full h-full flex items-center justify-center bg-transparent border-none"
-                                        style={{color: item.color, fontSize: `${item.fontSize}px`}}
+                                        className="text-center bg-transparent border-none outline-none w-full"
+                                        style={{
+                                            color: item.color,
+                                            fontSize: `${item.fontSize}px`,
+                                        }}
                                         value={item.content}
+                                        placeholder="Type your text here"
                                         onChange={(e) => {
                                             const updatedItems = canvasItems.map((i) => {
                                                 if (i.id === item.id) {
@@ -183,8 +190,8 @@ function App() {
                                             setCanvasItems(updatedItems);
                                         }}
                                     />
-                                    <div className="absolute bottom-0 translate-y-12 flex space-x-2">
-                                    {colors.map((color) => (
+                                    <div className="absolute bottom-0 -translate-x-1/2 translate-y-12 flex space-x-2">
+                                        {colors.map((color) => (
                                             <div
                                                 key={color}
                                                 className={`w-6 h-6 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-primary' : ''}`}
