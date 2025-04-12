@@ -187,7 +187,7 @@ function App() {
                                     {colors.map((color) => (
                                             <div
                                                 key={color}
-                                                className={`w-6 h-6 rounded-full cursor-pointer ${item.selectedColor === color ? 'ring-2 ring-primary' : ''}`}
+                                                className={`w-6 h-6 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-primary' : ''}`}
                                                 style={{
                                                     backgroundColor: color,
                                                     border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none'
