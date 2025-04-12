@@ -209,7 +209,7 @@ function App() {
                     </div>
                 )}
             </div>
-            <div className="w-3/5 bg-white97 min-h-full px-8 flex flex-col">
+            <div className="w-3/5  min-h-full px-8 flex flex-col">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <img src={Logo} alt={"Canvas Editor"}/>
@@ -222,22 +222,22 @@ function App() {
                 </div>
 
                 <div className="mt-8">
-                    <h2 className="text-medium font-bold text-gray-800 mb-4">Add content</h2>
+                    <h2 className="text-medium font-bold text-gray-800 mb-4 bg-white97 p-4">Add content</h2>
                     <div className="grid grid-cols-3 gap-4">
                         <button onClick={handleText}
-                                className="bg-white p-4 rounded shadow-sm flex flex-col items-center justify-center">
+                                className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center ">
                             <div className="flex items-center justify-center mb-2">
                                 <img className={"w-32 h-32"} src={Text} alt={"Text"}/>
                             </div>
                             <p className="text-18 text-black100 font-medium">Text</p>
                         </button>
-                        <button className="bg-white p-4 rounded shadow-sm flex flex-col items-center justify-center">
+                        <button className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center mb-2">
                                 <img className={"w-32 h-32"} src={Image} alt={"Image"}/>
                             </div>
                             <p className="text-18 text-black100 font-medium">Image</p>
                         </button>
-                        <button className="bg-white p-4 rounded shadow-sm flex flex-col items-center justify-center">
+                        <button className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center">
                             <div className="flex items-center justify-center mb-2">
                                 <img className={"w-32 h-32"} src={Background} alt={"Background"}/>
                             </div>
