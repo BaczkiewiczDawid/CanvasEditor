@@ -105,6 +105,10 @@ function App() {
         setCanvasItems(updatedItems);
     }
 
+    const handleResetCanvas = () => {
+        setCanvasItems([])
+    }
+
     return (
         <div className="min-w-screen min-h-screen flex bg-white px-24 py-8">
             {/* @ts-ignore */}
@@ -215,7 +219,8 @@ function App() {
                         <img src={Logo} alt={"Canvas Editor"}/>
                         <h1 className="font-bold text-gray-800 text-32 ml-4">CanvasEditor</h1>
                     </div>
-                    <button className={"border-b-2 border-redPrimary flex items-center justify-between gap-x-2"}>
+                    <button className={"border-b-2 border-redPrimary flex items-center justify-between gap-x-2"}
+                            onClick={handleResetCanvas}>
                         <p className="text-redPrimary text-sm">Reset</p>
                         <img src={Reset} alt="Reset" className={"w-6"}/>
                     </button>
