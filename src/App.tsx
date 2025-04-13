@@ -2,13 +2,13 @@ import React, {useRef, useState} from 'react';
 import Logo from './assets/images/logo.svg';
 import Text from './assets/images/text.svg';
 import Image from './assets/images/img.svg';
-import Background from './assets/images/background.svg';
 import Reset from "./assets/images/reset.svg";
 import Move from "./assets/images/move.svg";
 import Delete from "./assets/images/delete.svg";
 import Warning from "./assets/images/alert.svg";
 import {Button} from "./components/button";
 import Close from "./assets/images/close.svg"
+import Background from "./assets/images/background.svg";
 
 type CanvasItem = {
     id: number;
@@ -25,7 +25,51 @@ type CanvasItem = {
 function App() {
     const [canvasItems, setCanvasItems] = useState<CanvasItem[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedBackground, setSelectedBackground] = useState(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const backgroundInputRef = useRef(null)
+
+    const handleBackgroundSelectorClick = () => {
+        if (backgroundInputRef.current) {
+            //@ts-ignore
+            backgroundInputRef.current.click();
+        }
+    }
+
+    const handleFileChange = (e: any) => {
+        const file = e.target.files[0]
+
+        if (file) {
+            setSelectedBackground(file);
+
+            if (canvasItems.find((item) => item.type === 'background')) {
+                const updatedItems = canvasItems.map((item) => {
+                    if (item.type === 'background') {
+                        return {
+                            ...item,
+                            content: URL.createObjectURL(file),
+                        };
+                    }
+                    return item;
+                });
+                setCanvasItems(updatedItems);
+                return;
+            } else {
+                setCanvasItems([...canvasItems, {
+                    id: canvasItems.length + 1,
+                    type: "background",
+                    content: URL.createObjectURL(file),
+                    x: 0,
+                    y: 0,
+                    fontSize: 0,
+                    color: "#000000",
+                    dragging: false,
+                    isDraggable: false,
+                }]);
+            }
+        }
+    }
+
 
     const handleText = () => {
         const newText = {
@@ -145,7 +189,9 @@ function App() {
                         </div>
                     </div>
                 ) : (
-                    <div className="w-full h-full relative bg-black75">
+                    <div
+                        className={`w-full h-full relative ${canvasItems.find((item) => item.type === 'background') ? 'bg-cover bg-center' : 'bg-black75'}`}
+                        style={{backgroundImage: `url(${canvasItems.find((item) => item.type === 'background')?.content})`}}>
                         {canvasItems.map((item: any) => (
                             item.type === 'text' && (
                                 <div
@@ -221,7 +267,7 @@ function App() {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <img src={Logo} alt={"Canvas Editor"}/>
-                        <h1 className="font-bold text-gray-800 text-32 ml-4">CanvasEditor</h1>
+                        <h1 className="font-bold text-black100 text-32 ml-4">CanvasEditor</h1>
                     </div>
                     <button className={"border-b-2 border-redPrimary flex items-center justify-between gap-x-2"}
                             onClick={() => {
@@ -248,12 +294,23 @@ function App() {
                             </div>
                             <p className="text-18 text-black100 font-medium">Image</p>
                         </button>
-                        <button className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center">
-                            <div className="flex items-center justify-center mb-2">
-                                <img className={"w-32 h-32"} src={Background} alt={"Background"}/>
-                            </div>
-                            <p className="text-18 text-black100 font-medium">Background</p>
-                        </button>
+                        <div>
+                            <button
+                                onClick={handleBackgroundSelectorClick}
+                                className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center w-full"
+                            >
+                                <div className="flex items-center justify-center mb-2">
+                                    <img className={"w-32 h-32"} src={Background} alt={"Background"}/>
+                                </div>
+                                <p className="text-18 text-black100 font-medium">Background</p>
+                            </button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                ref={backgroundInputRef}
+                                className="hidden"/>
+                        </div>
                     </div>
                 </div>
                 <div className="mt-auto flex justify-end">
@@ -266,7 +323,7 @@ function App() {
                     <div
                         className={"w-1/2 py-16 bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-lg flex flex-col items-center justify-center z-1000"}>
                         <button className={"absolute top-6 right-6"} onClick={() => setIsModalOpen(false)}>
-                            <img src={Close} alt={"Close modal"} className={"w-4 h-4"} />
+                            <img src={Close} alt={"Close modal"} className={"w-4 h-4"}/>
                         </button>
                         <img src={Warning} alt={"Warning"} className={"w-1/4"}/>
                         <div className={"w-3/4 text-center"}>
