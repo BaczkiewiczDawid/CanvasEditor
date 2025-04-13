@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ca3379d-31f6-4bf7-be8c-8afb4b882b98" name="Changes" comment="feat: reset modal">
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
+    <list default="true" id="1ca3379d-31f6-4bf7-be8c-8afb4b882b98" name="Changes" comment="feat: set background image">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
     </list>
@@ -207,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744468784332</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="feat: set background image">
+      <option name="closed" value="true" />
+      <created>1744564597807</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1744564597807</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,6 +229,7 @@
     <MESSAGE value="feat: change colors - add border for selected color" />
     <MESSAGE value="fix: design" />
     <MESSAGE value="feat: reset modal" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: reset modal" />
+    <MESSAGE value="feat: set background image" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: set background image" />
   </component>
 </project>

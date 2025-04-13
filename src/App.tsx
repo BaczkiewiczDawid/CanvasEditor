@@ -25,23 +25,30 @@ type CanvasItem = {
 function App() {
     const [canvasItems, setCanvasItems] = useState<CanvasItem[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedBackground, setSelectedBackground] = useState(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const backgroundInputRef = useRef(null)
+    const backgroundInputRef = useRef<HTMLInputElement>(null)
+    const imageInputRef = useRef<HTMLInputElement>(null)
 
     const handleBackgroundSelectorClick = () => {
         if (backgroundInputRef.current) {
-            //@ts-ignore
             backgroundInputRef.current.click();
         }
     }
 
-    const handleFileChange = (e: any) => {
+    const handleImageSelectorClick = () => {
+        if (imageInputRef.current) {
+            imageInputRef.current.click();
+        }
+    }
+
+    const handleFileChange = (e: any, type: "image" | "background") => {
         const file = e.target.files[0]
 
-        if (file) {
-            setSelectedBackground(file);
+        if (!file) {
+            return
+        }
 
+        if (type === "background") {
             if (canvasItems.find((item) => item.type === 'background')) {
                 const updatedItems = canvasItems.map((item) => {
                     if (item.type === 'background') {
@@ -67,7 +74,24 @@ function App() {
                     isDraggable: false,
                 }]);
             }
+        } else if (type === "image") {
+            const newImage = {
+                id: canvasItems.length + 1,
+                type: "image",
+                content: URL.createObjectURL(file),
+                x: 150,
+                y: 150,
+                fontSize: 0,
+                color: "#000000",
+                dragging: false,
+                isDraggable: true,
+            }
+
+            setCanvasItems([...canvasItems, newImage]);
+        } else {
+            return
         }
+
     }
 
 
@@ -288,12 +312,23 @@ function App() {
                             </div>
                             <p className="text-18 text-black100 font-medium">Text</p>
                         </button>
-                        <button className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center">
-                            <div className="flex items-center justify-center mb-2">
-                                <img className={"w-32 h-32"} src={Image} alt={"Image"}/>
-                            </div>
-                            <p className="text-18 text-black100 font-medium">Image</p>
-                        </button>
+                        <div>
+                            <button
+                                className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center"
+                                onClick={handleImageSelectorClick}
+                            >
+                                <div className="flex items-center justify-center mb-2">
+                                    <img className={"w-32 h-32"} src={Image} alt={"Image"}/>
+                                </div>
+                                <p className="text-18 text-black100 font-medium">Image</p>
+                            </button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleFileChange(e, "image")}
+                                ref={imageInputRef}
+                                className="hidden"/>
+                        </div>
                         <div>
                             <button
                                 onClick={handleBackgroundSelectorClick}
@@ -307,7 +342,7 @@ function App() {
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={handleFileChange}
+                                onChange={(e) => handleFileChange(e, "background")}
                                 ref={backgroundInputRef}
                                 className="hidden"/>
                         </div>
