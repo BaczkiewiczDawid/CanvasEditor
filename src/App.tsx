@@ -216,74 +216,122 @@ function App() {
                     <div
                         className={`w-full h-full relative ${canvasItems.find((item) => item.type === 'background') ? 'bg-cover bg-center' : 'bg-black75'}`}
                         style={{backgroundImage: `url(${canvasItems.find((item) => item.type === 'background')?.content})`}}>
-                        {canvasItems.map((item: any) => (
-                            item.type === 'text' && (
-                                <div
-                                    key={item.id}
-                                    className={"relative border-2 border-primary p-8"}
-                                    style={{
-                                        position: 'absolute',
-                                        left: item.x,
-                                        top: item.y,
-                                        transform: 'translate(-50%, -50%)',
-                                        minWidth: '300px',
-                                        minHeight: '150px',
-                                        backgroundColor: 'transparent',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                >
+                        {canvasItems.map((item: any) => {
+                            if (item.type === 'text') {
+                                return (
                                     <div
-                                        className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border cursor-move"
-                                        onMouseDown={(e) => handleMouseDown(e, item.id)}
-                                    >
-                                        <img src={Move} alt={"Move"} className={"w-4 h-4"}/>
-                                    </div>
-                                    <div
-                                        className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border  cursor-pointer"
-                                        onClick={() => deleteItem(item.id)}
-                                    >
-                                        <img src={Delete} alt={"Delete item"} className={"w-4 h-4"}/>
-                                    </div>
-                                    <div
-                                        className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
-                                        <div className="w-4 h-4 bg-primary border-white border-2 rounded-full"></div>
-                                    </div>
-                                    <input
-                                        className="text-center bg-transparent border-none outline-none w-full"
+                                        key={item.id}
+                                        className={"relative border-2 border-primary p-8"}
                                         style={{
-                                            color: item.color,
-                                            fontSize: `${item.fontSize}px`,
+                                            position: 'absolute',
+                                            left: item.x,
+                                            top: item.y,
+                                            transform: 'translate(-50%, -50%)',
+                                            minWidth: '300px',
+                                            minHeight: '150px',
+                                            backgroundColor: 'transparent',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
                                         }}
-                                        value={item.content}
-                                        placeholder="Type your text here"
-                                        onChange={(e) => {
-                                            const updatedItems = canvasItems.map((i) => {
-                                                if (i.id === item.id) {
-                                                    return {...i, content: e.target.value};
-                                                }
-                                                return i;
-                                            });
-                                            setCanvasItems(updatedItems);
-                                        }}
-                                    />
-                                    <div className="absolute bottom-0 left-0 translate-y-8 flex space-x-2">
-                                        {colors.map((color) => (
+                                    >
+                                        <div
+                                            className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border cursor-move"
+                                            onMouseDown={(e) => handleMouseDown(e, item.id)}
+                                        >
+                                            <img src={Move} alt={"Move"} className={"w-4 h-4"}/>
+                                        </div>
+                                        <div
+                                            className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border cursor-pointer"
+                                            onClick={() => deleteItem(item.id)}
+                                        >
+                                            <img src={Delete} alt={"Delete item"} className={"w-4 h-4"}/>
+                                        </div>
+                                        <div
+                                            className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
                                             <div
-                                                key={color}
-                                                className={`w-4 h-4 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-white' : ''}`}
-                                                style={{
-                                                    backgroundColor: color,
-                                                    border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none'
-                                                }}
-                                                onClick={() => handleColorChange(color, item.id)}
-                                            />
-                                        ))}
+                                                className="w-4 h-4 bg-primary border-white border-2 rounded-full"></div>
+                                        </div>
+                                        <input
+                                            className="text-center bg-transparent border-none outline-none w-full"
+                                            style={{
+                                                color: item.color,
+                                                fontSize: `${item.fontSize}px`,
+                                            }}
+                                            value={item.content}
+                                            placeholder="Type your text here"
+                                            onChange={(e) => {
+                                                const updatedItems = canvasItems.map((i) => {
+                                                    if (i.id === item.id) {
+                                                        return {...i, content: e.target.value};
+                                                    }
+                                                    return i;
+                                                });
+                                                setCanvasItems(updatedItems);
+                                            }}
+                                        />
+                                        <div className="absolute bottom-0 left-0 translate-y-8 flex space-x-2">
+                                            {colors.map((color) => (
+                                                <div
+                                                    key={color}
+                                                    className={`w-4 h-4 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-white' : ''}`}
+                                                    style={{
+                                                        backgroundColor: color,
+                                                        border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none'
+                                                    }}
+                                                    onClick={() => handleColorChange(color, item.id)}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        ))}
+                                );
+                            } else if (item.type === 'image') {
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className={"relative border-2 border-primary p-2"}
+                                        style={{
+                                            position: 'absolute',
+                                            left: item.x,
+                                            top: item.y,
+                                            transform: 'translate(-50%, -50%)',
+                                            backgroundColor: 'transparent',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <div
+                                            className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border cursor-move"
+                                            onMouseDown={(e) => handleMouseDown(e, item.id)}
+                                        >
+                                            <img src={Move} alt={"Move"} className={"w-4 h-4"}/>
+                                        </div>
+                                        <div
+                                            className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border cursor-pointer"
+                                            onClick={() => deleteItem(item.id)}
+                                        >
+                                            <img src={Delete} alt={"Delete item"} className={"w-4 h-4"}/>
+                                        </div>
+                                        <div
+                                            className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
+                                            <div
+                                                className="w-4 h-4 bg-primary border-white border-2 rounded-full"></div>
+                                        </div>
+                                        <img
+                                            src={item.content}
+                                            alt={item.alt || "Canvas image"}
+                                            style={{
+                                                maxWidth: item.width || '300px',
+                                                maxHeight: item.height || '200px',
+                                                objectFit: 'contain'
+                                            }}
+                                        />
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })}
                     </div>
                 )}
             </div>
