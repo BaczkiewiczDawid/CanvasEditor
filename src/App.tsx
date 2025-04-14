@@ -28,6 +28,8 @@ function App() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const backgroundInputRef = useRef<HTMLInputElement>(null)
     const imageInputRef = useRef<HTMLInputElement>(null)
+    const [dragOffsetX, setDragOffsetX] = useState<number>(0);
+    const [dragOffsetY, setDragOffsetY] = useState<number>(0);
 
     const handleBackgroundSelectorClick = () => {
         if (backgroundInputRef.current) {
@@ -111,7 +113,19 @@ function App() {
         setCanvasItems([...canvasItems, newText]);
     }
 
-    const handleMouseDown = (e: any, id: number) => {
+
+    const handleMouseDown = (e: React.MouseEvent, id: number) => {
+        const draggedItem = canvasItems.find(item => item.id === id);
+        if (!draggedItem || !canvasRef.current) return;
+
+        const rect = canvasRef.current.getBoundingClientRect();
+
+        const offsetX = e.clientX - rect.left - draggedItem.x;
+        const offsetY = e.clientY - rect.top - draggedItem.y;
+
+        setDragOffsetX(offsetX);
+        setDragOffsetY(offsetY);
+
         const updatedItems = canvasItems.map(item => {
             if (item.id === id) {
                 return {...item, dragging: true};
@@ -121,14 +135,15 @@ function App() {
         setCanvasItems(updatedItems);
     };
 
-    const handleMoveItem = (e: any) => {
+    const handleMoveItem = (e: React.MouseEvent) => {
         if (!canvasItems.some((item) => item.dragging) || !canvasRef.current) {
-            return
+            return;
         }
 
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+
+        const x = e.clientX - rect.left - dragOffsetX;
+        const y = e.clientY - rect.top - dragOffsetY;
 
         const updatedItems = canvasItems.map((item) => {
             if (item.dragging) {
@@ -139,10 +154,10 @@ function App() {
                 };
             }
             return item;
-        })
+        });
 
         setCanvasItems(updatedItems);
-    }
+    };
 
     const handleMouseUp = () => {
         const updatedItems = canvasItems.map(item => {
@@ -226,9 +241,8 @@ function App() {
                                             position: 'absolute',
                                             left: item.x,
                                             top: item.y,
-                                            transform: 'translate(-50%, -50%)',
-                                            minWidth: '300px',
-                                            minHeight: '150px',
+                                            minWidth: '100px',
+                                            minHeight: '50px',
                                             backgroundColor: 'transparent',
                                             display: 'flex',
                                             alignItems: 'center',
