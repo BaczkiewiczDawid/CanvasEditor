@@ -326,7 +326,7 @@ function App() {
     };
 
     return (
-        <div className="min-w-screen min-h-screen flex bg-white px-24 py-8">
+        <div className="min-w-screen min-h-screen flex bg-white px-24 py-8 max-h-screen">
             {/* @ts-ignore */}
             <div ref={canvasRef}
                  onMouseMove={(e) => handleMoveItem(e)}
@@ -491,11 +491,11 @@ function App() {
                     </div>
                 )}
             </div>
-            <div className="w-3/5  min-h-full px-8 flex flex-col">
+            <div className="w-3/5 px-8 flex flex-col mah-x-screen">
                 <Header setIsModalOpen={setIsModalOpen}/>
                 <div className="mt-8">
                     <h2 className="text-medium font-bold text-gray-800 mb-4 bg-white97 p-4">Add content</h2>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-y-8">
                         <ActionButton onClick={handleText} name={"Text"} image={Text}/>
                         <ActionButton onClick={() => handleImageSelectorClick("image")}
                                       handleFileChange={handleFileChange}

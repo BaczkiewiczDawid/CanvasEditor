@@ -10,13 +10,13 @@ type Props = {
 
 export const ActionButton = ({onClick, handleFileChange, imageInputRef, image, name}: Props) => {
     return (
-        <div>
+        <div className={"flex items-center justify-center"}>
             <button
                 className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center"
                 onClick={onClick}
             >
                 <div className="flex items-center justify-center mb-2">
-                    <img className={"w-32 h-32"} src={image} alt={name}/>
+                    <img className={"w-16 h-16"} src={image} alt={name}/>
                 </div>
                 <p className="text-18 text-black100 font-medium">{name}</p>
             </button>
