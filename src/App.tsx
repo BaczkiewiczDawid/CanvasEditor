@@ -284,7 +284,6 @@ function App() {
 
     const exportCanvasToPng = async () => {
         if (!canvasRef.current || canvasItems.length === 0) {
-            alert("There's nothing to export. Please add content to your poster first.");
             return;
         }
 
