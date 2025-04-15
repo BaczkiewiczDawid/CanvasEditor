@@ -17,7 +17,7 @@ export const Modal = ({setIsModalOpen, handleResetCanvas}: Props) => {
                 <button className={"absolute top-6 right-6"} onClick={() => setIsModalOpen(false)}>
                     <img src={Close} alt={"Close modal"} className={"w-4 h-4"}/>
                 </button>
-                <img src={Warning} alt={"Warning"} className={"w-1/4"}/>
+                <img src={Warning} alt={"Warning"} className={"w-1/4"} onDragStart={(e) => e.preventDefault()}/>
                 <div className={"w-3/4 text-center"}>
                     <h2 className={"font-bold text-32 text-black"}>Warning</h2>
                     <p className={"font-medium text-18 text-center text-black75"}>You're about to reset your

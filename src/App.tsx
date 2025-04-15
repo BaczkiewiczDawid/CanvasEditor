@@ -387,7 +387,8 @@ function App() {
                                             className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border cursor-pointer"
                                             onClick={() => deleteItem(item.id)}
                                         >
-                                            <img src={Delete} alt="Delete item" className="w-4 h-4"/>
+                                            <img src={Delete} alt="Delete item" className="w-4 h-4"
+                                                 onDragStart={(e) => e.preventDefault()}/>
                                         </div>
 
                                         <div
