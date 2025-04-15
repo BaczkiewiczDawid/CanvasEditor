@@ -21,6 +21,7 @@ type CanvasItem = {
     isDraggable: boolean;
     width?: number;
     height?: number;
+    resizing?: boolean;
     alt?: string;
 }
 
@@ -32,6 +33,11 @@ function App() {
     const imageInputRef = useRef<HTMLInputElement>(null)
     const [dragOffsetX, setDragOffsetX] = useState<number>(0);
     const [dragOffsetY, setDragOffsetY] = useState<number>(0);
+    const [resizeStartX, setResizeStartX] = useState<number>(0);
+    const [resizeStartY, setResizeStartY] = useState<number>(0);
+    const [initialWidth, setInitialWidth] = useState<number>(0);
+    const [initialHeight, setInitialHeight] = useState<number>(0);
+    const [initialFontSize, setInitialFontSize] = useState<number>(0);
     const [isChanged, setIsChanged] = useState(false);
 
     const handleImageSelectorClick = (type: "image" | "background") => {
@@ -92,15 +98,15 @@ function App() {
                 color: "#000000",
                 dragging: false,
                 isDraggable: true,
+                width: 300,
+                height: 200,
             }
 
             setCanvasItems([...canvasItems, newImage]);
         } else {
             return
         }
-
     }
-
 
     const handleText = () => {
         const newText = {
@@ -113,11 +119,12 @@ function App() {
             color: "#000000",
             dragging: false,
             isDraggable: true,
+            width: 200,
+            height: 50,
         }
 
         setCanvasItems([...canvasItems, newText]);
     }
-
 
     const handleMouseDown = (e: React.MouseEvent, id: number) => {
         const draggedItem = canvasItems.find(item => item.id === id);
@@ -140,14 +147,78 @@ function App() {
         setCanvasItems(updatedItems);
     };
 
+    const handleResizeStart = (e: React.MouseEvent, id: number) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!canvasRef.current) return;
+
+        const rect = canvasRef.current.getBoundingClientRect();
+        const resizingItem = canvasItems.find(item => item.id === id);
+
+        if (!resizingItem) return;
+
+        setResizeStartX(e.clientX - rect.left);
+        setResizeStartY(e.clientY - rect.top);
+        setInitialWidth(resizingItem.width || 200);
+        setInitialHeight(resizingItem.height || 50);
+        setInitialFontSize(resizingItem.fontSize);
+
+        const updatedItems = canvasItems.map(item => {
+            if (item.id === id) {
+                return {...item, resizing: true};
+            }
+            return item;
+        });
+
+        setCanvasItems(updatedItems);
+    };
+
     const handleMoveItem = (e: React.MouseEvent) => {
-        if (!canvasItems.some((item) => item.dragging) || !canvasRef.current) {
+        if (!canvasRef.current) {
             return;
         }
 
         const rect = canvasRef.current.getBoundingClientRect();
-        const draggingItem = canvasItems.find(item => item.dragging);
 
+        // Handle resizing
+        const resizingItem = canvasItems.find(item => item.resizing);
+        if (resizingItem) {
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+
+            const deltaX = currentX - resizeStartX;
+            const deltaY = currentY - resizeStartY;
+
+            const newWidth = Math.max(50, initialWidth + deltaX);
+            const newHeight = Math.max(30, initialHeight + deltaY);
+
+            // Calculate new font size for text items proportionally
+            let newFontSize = resizingItem.fontSize;
+            if (resizingItem.type === 'text') {
+                // Scale font size with height
+                const scaleFactor = newHeight / initialHeight;
+                newFontSize = Math.max(10, Math.round(initialFontSize * scaleFactor));
+            }
+
+            const updatedItems = canvasItems.map(item => {
+                if (item.resizing) {
+                    return {
+                        ...item,
+                        width: newWidth,
+                        height: newHeight,
+                        fontSize: item.type === 'text' ? newFontSize : item.fontSize
+                    };
+                }
+                return item;
+            });
+
+            setCanvasItems(updatedItems);
+            return;
+        }
+
+        // Handle dragging
+        const draggingItem = canvasItems.find(item => item.dragging);
         if (!draggingItem) return;
 
         let x = e.clientX - rect.left - dragOffsetX;
@@ -178,8 +249,8 @@ function App() {
 
     const handleMouseUp = () => {
         const updatedItems = canvasItems.map(item => {
-            if (item.dragging) {
-                return {...item, dragging: false};
+            if (item.dragging || item.resizing) {
+                return {...item, dragging: false, resizing: false};
             }
             return item;
         });
@@ -253,10 +324,13 @@ function App() {
                                 return (
                                     <div
                                         key={item.id}
-                                        className="relative border-2 border-primary p-4 w-fit h-fit flex items-center justify-center"
+                                        className="relative border-2 border-primary p-4 flex items-center justify-center"
                                         style={{
+                                            position: 'absolute',
                                             left: item.x,
                                             top: item.y,
+                                            width: item.width || 'auto',
+                                            height: item.height || 'auto',
                                             backgroundColor: 'transparent',
                                         }}
                                     >
@@ -276,12 +350,14 @@ function App() {
                                         </div>
 
                                         <div
-                                            className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
+                                            className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2 cursor-se-resize"
+                                            onMouseDown={(e) => handleResizeStart(e, item.id)}
+                                        >
                                             <div className="w-4 h-4 bg-primary border-white border-2 rounded-full"/>
                                         </div>
 
                                         <div
-                                            className="bg-transparent border-none outline-none text-center whitespace-pre-wrap break-words min-w-[50px] min-h-[24px]"
+                                            className="bg-transparent border-none outline-none text-center whitespace-pre-wrap break-words min-w-[50px] min-h-[24px] w-full h-full flex items-center justify-center"
                                             contentEditable
                                             suppressContentEditableWarning
                                             ref={(el) => {
@@ -295,7 +371,8 @@ function App() {
                                                 opacity: isChanged ? 1 : .25,
                                             }}
                                             onInput={(e) => {
-                                                const newValue = (e.target as HTMLElement).innerText;
+                                                let newValue = (e.target as HTMLElement).innerText;
+
                                                 const updatedItems = canvasItems.map((i) =>
                                                     i.id === item.id ? {...i, content: newValue} : i
                                                 );
@@ -329,6 +406,8 @@ function App() {
                                             position: 'absolute',
                                             left: item.x,
                                             top: item.y,
+                                            width: item.width || '300px',
+                                            height: item.height || '200px',
                                             backgroundColor: 'transparent',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -348,7 +427,9 @@ function App() {
                                             <img src={Delete} alt={"Delete item"} className={"w-4 h-4"}/>
                                         </div>
                                         <div
-                                            className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
+                                            className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2 cursor-se-resize"
+                                            onMouseDown={(e) => handleResizeStart(e, item.id)}
+                                        >
                                             <div
                                                 className="w-4 h-4 bg-primary border-white border-2 rounded-full"></div>
                                         </div>
@@ -356,8 +437,8 @@ function App() {
                                             src={item.content}
                                             alt={item.alt || "Canvas image"}
                                             style={{
-                                                maxWidth: item.width || '300px',
-                                                maxHeight: item.height || '200px',
+                                                maxWidth: '100%',
+                                                maxHeight: '100%',
                                                 objectFit: 'contain'
                                             }}
                                         />
