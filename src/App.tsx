@@ -413,8 +413,7 @@ function App() {
                                                 opacity: isChanged ? 1 : .25,
                                             }}
                                             onInput={(e) => {
-                                                let newValue = (e.target as HTMLElement).innerText;
-
+                                                const newValue = (e.target as HTMLElement).innerText;
                                                 const updatedItems = canvasItems.map((i) =>
                                                     i.id === item.id ? {...i, content: newValue} : i
                                                 );
