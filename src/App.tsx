@@ -33,6 +33,8 @@ function App() {
     const imageInputRef = useRef<HTMLInputElement>(null)
     const [dragOffsetX, setDragOffsetX] = useState<number>(0);
     const [dragOffsetY, setDragOffsetY] = useState<number>(0);
+    const [isChanged, setIsChanged] = useState(false);
+    const contentRef = useRef(null);
 
     const handleBackgroundSelectorClick = () => {
         if (backgroundInputRef.current) {
@@ -104,8 +106,8 @@ function App() {
         const newText = {
             id: canvasItems.length + 1,
             type: "text",
-            content: "New text",
-            x: 150,
+            content: "Type your text here",
+            x: 100,
             y: 150,
             fontSize: 18,
             color: "#000000",
@@ -157,13 +159,8 @@ function App() {
         const itemWidth = draggingItem.width || 100;
         const itemHeight = draggingItem.height || 50;
 
-        if (draggingItem.type === 'image') {
-            x = Math.max(0, Math.min(x, canvasWidth));
-            y = Math.max(0, Math.min(y, canvasHeight));
-        } else {
-            x = Math.max(0, Math.min(x, canvasWidth - itemWidth));
-            y = Math.max(0, Math.min(y, canvasHeight - itemHeight));
-        }
+        x = Math.max(0, Math.min(x, canvasWidth - itemWidth));
+        y = Math.max(0, Math.min(y, canvasHeight - itemHeight));
 
         const updatedItems = canvasItems.map((item) => {
             if (item.dragging) {
@@ -222,7 +219,7 @@ function App() {
             <div ref={canvasRef}
                  onMouseMove={(e) => handleMoveItem(e)}
                  onMouseUp={handleMouseUp}
-                 className="w-2/5 bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen">
+                 className="w-2/5 bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen relative overflow-hidden">
                 {canvasItems.length === 0 ? (
                     <div
                         className={"w-full bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen"}>
@@ -249,62 +246,64 @@ function App() {
                     </div>
                 ) : (
                     <div
-                        className={`w-full h-full relative ${canvasItems.find((item) => item.type === 'background') ? 'bg-cover bg-center' : 'bg-black75'}`}
+                        className={`w-full h-full ${canvasItems.find((item) => item.type === 'background') ? 'bg-cover bg-center' : 'bg-black75'}`}
                         style={{backgroundImage: `url(${canvasItems.find((item) => item.type === 'background')?.content})`}}>
                         {canvasItems.map((item: any) => {
                             if (item.type === 'text') {
                                 return (
                                     <div
                                         key={item.id}
-                                        className={"relative border-2 border-primary p-8"}
+                                        className="relative border-2 border-primary p-4 w-fit h-fit flex items-center justify-center"
                                         style={{
-                                            position: 'absolute',
                                             left: item.x,
                                             top: item.y,
-                                            minWidth: '100px',
-                                            minHeight: '50px',
                                             backgroundColor: 'transparent',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
                                         }}
                                     >
                                         <div
                                             className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border cursor-move"
                                             onMouseDown={(e) => handleMouseDown(e, item.id)}
                                         >
-                                            <img src={Move} alt={"Move"} className={"w-4 h-4 select-none"}
+                                            <img src={Move} alt="Move" className="w-4 h-4 select-none"
                                                  onDragStart={(e) => e.preventDefault()}/>
                                         </div>
+
                                         <div
                                             className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border cursor-pointer"
                                             onClick={() => deleteItem(item.id)}
                                         >
-                                            <img src={Delete} alt={"Delete item"} className={"w-4 h-4"}/>
+                                            <img src={Delete} alt="Delete item" className="w-4 h-4"/>
                                         </div>
+
                                         <div
                                             className="absolute bottom-0 right-0 w-6 h-6 flex items-center justify-center translate-x-1/2 translate-y-1/2">
-                                            <div
-                                                className="w-4 h-4 bg-primary border-white border-2 rounded-full"></div>
+                                            <div className="w-4 h-4 bg-primary border-white border-2 rounded-full"/>
                                         </div>
-                                        <input
-                                            className="text-center bg-transparent border-none outline-none w-full"
+
+                                        <div
+                                            className="bg-transparent border-none outline-none text-center whitespace-pre-wrap break-words min-w-[50px] min-h-[24px]"
+                                            contentEditable
+                                            suppressContentEditableWarning
+                                            ref={(el) => {
+                                                if (el && el.innerText !== item.content) {
+                                                    el.innerText = item.content;
+                                                }
+                                            }}
                                             style={{
                                                 color: item.color,
                                                 fontSize: `${item.fontSize}px`,
+                                                opacity: isChanged ? 1 : .25,
                                             }}
-                                            value={item.content}
-                                            placeholder="Type your text here"
-                                            onChange={(e) => {
-                                                const updatedItems = canvasItems.map((i) => {
-                                                    if (i.id === item.id) {
-                                                        return {...i, content: e.target.value};
-                                                    }
-                                                    return i;
-                                                });
+                                            onInput={(e) => {
+                                                const newValue = (e.target as HTMLElement).innerText;
+                                                const updatedItems = canvasItems.map((i) =>
+                                                    i.id === item.id ? {...i, content: newValue} : i
+                                                );
+
+                                                setIsChanged(true)
                                                 setCanvasItems(updatedItems);
-                                            }}
-                                        />
+                                            }}/>
+
                                         <div className="absolute bottom-0 left-0 translate-y-8 flex space-x-2">
                                             {colors.map((color) => (
                                                 <div
@@ -312,13 +311,14 @@ function App() {
                                                     className={`w-4 h-4 rounded-full cursor-pointer ${item.color === color ? 'ring-2 ring-white' : ''}`}
                                                     style={{
                                                         backgroundColor: color,
-                                                        border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none'
+                                                        border: color === '#FFFFFF' ? '1px solid #D3D3D3' : 'none',
                                                     }}
                                                     onClick={() => handleColorChange(color, item.id)}
                                                 />
                                             ))}
                                         </div>
                                     </div>
+
                                 );
                             } else if (item.type === 'image') {
                                 return (
@@ -329,7 +329,6 @@ function App() {
                                             position: 'absolute',
                                             left: item.x,
                                             top: item.y,
-                                            transform: 'translate(-50%, -50%)',
                                             backgroundColor: 'transparent',
                                             display: 'flex',
                                             alignItems: 'center',
