@@ -9,6 +9,7 @@ import Image from "./assets/images/img.svg"
 import Text from "./assets/images/text.svg"
 import {Modal} from "./components/modal";
 import html2canvas from 'html2canvas';
+import StartImage from './assets/images/start.png'
 
 type CanvasItem = {
     id: number;
@@ -331,30 +332,11 @@ function App() {
             <div ref={canvasRef}
                  onMouseMove={(e) => handleMoveItem(e)}
                  onMouseUp={handleMouseUp}
-                 className="w-2/5 bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen relative overflow-hidden">
+                 className="w-1/2 bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen relative overflow-hidden">
                 {canvasItems.length === 0 ? (
                     <div
-                        className={"w-full bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen"}>
-                        <div className="w-24 h-36 border border-purple-700 rounded-md flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="48" viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                                 className="text-purple-700">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                        </div>
-                        <div className={"w-2/5 h-1 bg-primary50 opacity-50 mt-4 rounded-full"}></div>
-                        <div className="text-center flex flex-col items-center justify-center gap-y-3 mt-4 w-2/3">
-                            <h1 className="text-xl font-bold text-black100">Create your own Poster!</h1>
-                            <p className="font-medium text-sm text-black75">
-                                It's so simple. Start creating your own poster by clicking one of the action buttons
-                                located on
-                                the right.
-                            </p>
-                            <p className="font-light text-black75 text-xs">(Ratio 4:5)</p>
-                        </div>
+                        className={"max-w-md aspect-[4/5] bg-primary25 min-h-full flex flex-col justify-center items-center max-h-screen"}>
+                        <img src={StartImage} alt="Start image" className={"object-cover"}/>
                     </div>
                 ) : (
                     <div
@@ -491,7 +473,7 @@ function App() {
                     </div>
                 )}
             </div>
-            <div className="w-3/5 px-8 flex flex-col mah-x-screen">
+            <div className="w-full px-8 flex flex-col mah-x-screen">
                 <Header setIsModalOpen={setIsModalOpen}/>
                 <div className="mt-8">
                     <h2 className="text-medium font-bold text-gray-800 mb-4 bg-white97 p-4">Add content</h2>
