@@ -2,8 +2,8 @@ import React from "react";
 
 type Props = {
     onClick: () => void;
-    handleFileChange?: any
-    imageInputRef?: any
+    handleFileChange?: (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "background") => void
+    imageInputRef?: React.RefObject<HTMLInputElement | null>
     image?: any
     name: string
 }
