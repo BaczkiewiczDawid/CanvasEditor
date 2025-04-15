@@ -8,6 +8,7 @@ import {ActionButton} from "./components/action-button";
 import Image from "./assets/images/img.svg"
 import Text from "./assets/images/text.svg"
 import {Modal} from "./components/modal";
+import html2canvas from 'html2canvas';
 
 type CanvasItem = {
     id: number;
@@ -39,6 +40,15 @@ function App() {
     const [initialHeight, setInitialHeight] = useState<number>(0);
     const [initialFontSize, setInitialFontSize] = useState<number>(0);
     const [isChanged, setIsChanged] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+
+    const colors = [
+        '#000000',
+        '#FFFFFF',
+        '#FF0000',
+        '#0000FF',
+        '#00FF00',
+    ];
 
     const handleImageSelectorClick = (type: "image" | "background") => {
         if (type === "background") {
@@ -181,7 +191,6 @@ function App() {
 
         const rect = canvasRef.current.getBoundingClientRect();
 
-        // Handle resizing
         const resizingItem = canvasItems.find(item => item.resizing);
         if (resizingItem) {
             const currentX = e.clientX - rect.left;
@@ -193,10 +202,8 @@ function App() {
             const newWidth = Math.max(50, initialWidth + deltaX);
             const newHeight = Math.max(30, initialHeight + deltaY);
 
-            // Calculate new font size for text items proportionally
             let newFontSize = resizingItem.fontSize;
             if (resizingItem.type === 'text') {
-                // Scale font size with height
                 const scaleFactor = newHeight / initialHeight;
                 newFontSize = Math.max(10, Math.round(initialFontSize * scaleFactor));
             }
@@ -217,7 +224,6 @@ function App() {
             return;
         }
 
-        // Handle dragging
         const draggingItem = canvasItems.find(item => item.dragging);
         if (!draggingItem) return;
 
@@ -262,14 +268,6 @@ function App() {
         setCanvasItems(updatedItems);
     }
 
-    const colors = [
-        '#000000',
-        '#FFFFFF',
-        '#FF0000',
-        '#0000FF',
-        '#00FF00',
-    ];
-
     const handleColorChange = (color: string, id: number) => {
         const updatedItems = canvasItems.map(item => {
             if (item.id === id) {
@@ -283,6 +281,50 @@ function App() {
     const handleResetCanvas = () => {
         setCanvasItems([])
     }
+
+    const exportCanvasToPng = async () => {
+        if (!canvasRef.current || canvasItems.length === 0) {
+            alert("There's nothing to export. Please add content to your poster first.");
+            return;
+        }
+
+        try {
+            setIsExporting(true);
+
+            const controlsClass = 'canvas-export-controls';
+            const controlElements = canvasRef.current.querySelectorAll(
+                `.${controlsClass}`
+            );
+
+            controlElements.forEach(el => {
+                (el as HTMLElement).style.display = 'none';
+            });
+
+            const canvas = await html2canvas(canvasRef.current, {
+                backgroundColor: null,
+                scale: 2,
+                logging: false,
+                allowTaint: true,
+                useCORS: true
+            });
+
+            controlElements.forEach(el => {
+                (el as HTMLElement).style.display = '';
+            });
+
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'my-poster.png';
+            link.href = dataUrl;
+            link.click();
+
+        } catch (error) {
+            console.error("Error exporting canvas:", error);
+            alert("An error occurred while exporting. Please try again.");
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
     return (
         <div className="min-w-screen min-h-screen flex bg-white px-24 py-8">
@@ -469,7 +511,7 @@ function App() {
                     </div>
                 </div>
                 <div className="mt-auto flex justify-end">
-                    <Button text={"Export to PNG"}/>
+                    <Button disabled={!canvasItems.length} onClick={exportCanvasToPng} text={"Export to PNG"}/>
                 </div>
             </div>
             {isModalOpen && (
