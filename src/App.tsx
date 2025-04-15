@@ -1,14 +1,14 @@
 import React, {useRef, useState} from 'react';
-import Logo from './assets/images/logo.svg';
-import Text from './assets/images/text.svg';
-import Image from './assets/images/img.svg';
-import Reset from "./assets/images/reset.svg";
 import Move from "./assets/images/move.svg";
 import Delete from "./assets/images/delete.svg";
 import Warning from "./assets/images/alert.svg";
 import {Button} from "./components/button";
 import Close from "./assets/images/close.svg"
 import Background from "./assets/images/background.svg";
+import {Header} from "./components/header";
+import {ActionButton} from "./components/action-button";
+import Image from "./assets/images/img.svg"
+import Text from "./assets/images/text.svg"
 
 type CanvasItem = {
     id: number;
@@ -34,17 +34,18 @@ function App() {
     const [dragOffsetX, setDragOffsetX] = useState<number>(0);
     const [dragOffsetY, setDragOffsetY] = useState<number>(0);
     const [isChanged, setIsChanged] = useState(false);
-    const contentRef = useRef(null);
 
-    const handleBackgroundSelectorClick = () => {
-        if (backgroundInputRef.current) {
-            backgroundInputRef.current.click();
-        }
-    }
-
-    const handleImageSelectorClick = () => {
-        if (imageInputRef.current) {
-            imageInputRef.current.click();
+    const handleImageSelectorClick = (type: "image" | "background") => {
+        if (type === "background") {
+            if (backgroundInputRef.current) {
+                backgroundInputRef.current.click();
+            }
+        } else if (type === "image") {
+            if (imageInputRef.current) {
+                imageInputRef.current.click();
+            }
+        } else {
+            return
         }
     }
 
@@ -370,64 +371,21 @@ function App() {
                 )}
             </div>
             <div className="w-3/5  min-h-full px-8 flex flex-col">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                        <img src={Logo} alt={"Canvas Editor"}/>
-                        <h1 className="font-bold text-black100 text-32 ml-4">CanvasEditor</h1>
-                    </div>
-                    <button className={"border-b-2 border-redPrimary flex items-center justify-between gap-x-2"}
-                            onClick={() => {
-                                setIsModalOpen(true)
-                            }}>
-                        <p className="text-redPrimary text-sm">Reset</p>
-                        <img src={Reset} alt="Reset" className={"w-6"}/>
-                    </button>
-                </div>
-
+                <Header setIsModalOpen={setIsModalOpen}/>
                 <div className="mt-8">
                     <h2 className="text-medium font-bold text-gray-800 mb-4 bg-white97 p-4">Add content</h2>
                     <div className="grid grid-cols-3 gap-4">
-                        <button onClick={handleText}
-                                className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center ">
-                            <div className="flex items-center justify-center mb-2">
-                                <img className={"w-32 h-32"} src={Text} alt={"Text"}/>
-                            </div>
-                            <p className="text-18 text-black100 font-medium">Text</p>
-                        </button>
-                        <div>
-                            <button
-                                className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center"
-                                onClick={handleImageSelectorClick}
-                            >
-                                <div className="flex items-center justify-center mb-2">
-                                    <img className={"w-32 h-32"} src={Image} alt={"Image"}/>
-                                </div>
-                                <p className="text-18 text-black100 font-medium">Image</p>
-                            </button>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileChange(e, "image")}
-                                ref={imageInputRef}
-                                className="hidden"/>
-                        </div>
-                        <div>
-                            <button
-                                onClick={handleBackgroundSelectorClick}
-                                className="bg-white97 p-4 rounded shadow-sm flex flex-col items-center justify-center w-full"
-                            >
-                                <div className="flex items-center justify-center mb-2">
-                                    <img className={"w-32 h-32"} src={Background} alt={"Background"}/>
-                                </div>
-                                <p className="text-18 text-black100 font-medium">Background</p>
-                            </button>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileChange(e, "background")}
-                                ref={backgroundInputRef}
-                                className="hidden"/>
-                        </div>
+                        <ActionButton onClick={handleText} name={"Text"} image={Text}/>
+                        <ActionButton onClick={() => handleImageSelectorClick("image")}
+                                      handleFileChange={handleFileChange}
+                                      imageInputRef={imageInputRef} image={Image}
+                                      name={"Image"}/>
+                        <ActionButton onClick={() => handleImageSelectorClick("background")}
+                                      handleFileChange={(e: any) => handleFileChange(e, "background")}
+                                      imageInputRef={backgroundInputRef}
+                                      image={Background}
+                                      name={"Background"}
+                        />
                     </div>
                 </div>
                 <div className="mt-auto flex justify-end">
