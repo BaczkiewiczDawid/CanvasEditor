@@ -20,6 +20,9 @@ type CanvasItem = {
     color: string;
     dragging: boolean;
     isDraggable: boolean;
+    width?: number;
+    height?: number;
+    alt?: string;
 }
 
 function App() {
@@ -141,9 +144,26 @@ function App() {
         }
 
         const rect = canvasRef.current.getBoundingClientRect();
+        const draggingItem = canvasItems.find(item => item.dragging);
 
-        const x = e.clientX - rect.left - dragOffsetX;
-        const y = e.clientY - rect.top - dragOffsetY;
+        if (!draggingItem) return;
+
+        let x = e.clientX - rect.left - dragOffsetX;
+        let y = e.clientY - rect.top - dragOffsetY;
+
+        const canvasWidth = rect.width;
+        const canvasHeight = rect.height;
+
+        const itemWidth = draggingItem.width || 100;
+        const itemHeight = draggingItem.height || 50;
+
+        if (draggingItem.type === 'image') {
+            x = Math.max(0, Math.min(x, canvasWidth));
+            y = Math.max(0, Math.min(y, canvasHeight));
+        } else {
+            x = Math.max(0, Math.min(x, canvasWidth - itemWidth));
+            y = Math.max(0, Math.min(y, canvasHeight - itemHeight));
+        }
 
         const updatedItems = canvasItems.map((item) => {
             if (item.dragging) {
