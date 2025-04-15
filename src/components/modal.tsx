@@ -18,12 +18,12 @@ export const Modal = ({setIsModalOpen, handleResetCanvas}: Props) => {
                     <img src={Close} alt={"Close modal"} className={"w-4 h-4"}/>
                 </button>
                 <img src={Warning} alt={"Warning"} className={"w-1/4"} onDragStart={(e) => e.preventDefault()}/>
-                <div className={"w-3/4 text-center"}>
+                <div className={"w-3/5 text-center"}>
                     <h2 className={"font-bold text-32 text-black"}>Warning</h2>
-                    <p className={"font-medium text-18 text-center text-black75"}>You're about to reset your
+                    <p className={"font-medium text-18 text-center text-black75 mt-4"}>You're about to reset your
                         whole progress.
                         Are you sure you want to do it?</p>
-                    <div className={"flex gap-x-4 justify-center mt-8"}>
+                    <div className={"flex gap-x-8 justify-center mt-8"}>
                         <button className={"font-medium text-18"} onClick={() => setIsModalOpen(false)}>Cancel
                         </button>
                         <Button text={"Reset"} onClick={() => {
