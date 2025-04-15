@@ -30,7 +30,7 @@ type CanvasItem = {
 function App() {
     const [canvasItems, setCanvasItems] = useState<CanvasItem[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const canvasRef = useRef<HTMLDivElement | null>(null);
     const backgroundInputRef = useRef<HTMLInputElement>(null)
     const imageInputRef = useRef<HTMLInputElement>(null)
     const [dragOffsetX, setDragOffsetX] = useState<number>(0);
@@ -328,7 +328,6 @@ function App() {
 
     return (
         <div className="min-w-screen min-h-screen flex bg-white px-24 py-8 max-h-screen">
-            {/* @ts-ignore */}
             <div ref={canvasRef}
                  onMouseMove={(e) => handleMoveItem(e)}
                  onMouseUp={handleMouseUp}
