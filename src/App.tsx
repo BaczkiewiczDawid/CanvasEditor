@@ -253,7 +253,8 @@ function App() {
                                             className="absolute top-0 left-0 w-8 h-8 bg-white rounded-full flex items-center justify-center -translate-x-1/2 -translate-y-1/2 border cursor-move"
                                             onMouseDown={(e) => handleMouseDown(e, item.id)}
                                         >
-                                            <img src={Move} alt={"Move"} className={"w-4 h-4"}/>
+                                            <img src={Move} alt={"Move"} className={"w-4 h-4 select-none"}
+                                                 onDragStart={(e) => e.preventDefault()}/>
                                         </div>
                                         <div
                                             className="absolute top-0 right-0 w-8 h-8 bg-white rounded-full flex items-center justify-center translate-x-1/2 -translate-y-1/2 border cursor-pointer"
